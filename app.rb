@@ -3,7 +3,6 @@ require 'sinatra/activerecord'
 require 'haml'
 
 set :database, 'sqlite3:///shortened_urls.db'
-after :create, :set_country
 
 class ShortenedUrl < ActiveRecord::Base
    # Validates whether the value of the specified attributes are unique across the system.
@@ -17,22 +16,16 @@ class ShortenedUrl < ActiveRecord::Base
       :message => "The URL must start with http://, https://, or ftp:// ."
 end
 
-def set_country
-   xml = RestClient.get "http://api.hostip.info/get_xml.php?ip=#{ip}"  
-   self.country = XmlSimple.xml_in(xml.to_s, { 'ForceArray' => false })['featureMember']['Hostip']['countryAbbrev']
-   self.save
-end
-
 get '/' do
    haml :index
 end
 
 post '/' do
-	if params[:custom].empty?
-		@short_url = ShortenedUrl.find_or_create_by_url(params[:url])
-	else
-		@short_url = ShortenedUrl.find_or_create_by_url_and_custom_url(params[:url], params[:custom])
-	end
+   if params[:custom].empty?
+      @short_url = ShortenedUrl.find_or_create_by_url(params[:url])
+   else
+      @short_url = ShortenedUrl.find_or_create_by_url_and_custom_url(params[:url], params[:custom])
+   end
    if @short_url.valid?
       haml :success
    else
