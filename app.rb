@@ -60,8 +60,6 @@ post '/search_url' do
 end
 
 get '/:shortened' do
-   if params[:shortened] =~ /[0-9]+/
-      short_url = ShortenedUrl.find(params[:shortened].to_i(36))
-      redirect short_url.url, 301
-   end
+   short_url = ShortenedUrl.find(params[:shortened].to_i(36))
+   redirect short_url.url, 301
 end
