@@ -3,6 +3,7 @@ require 'sinatra/activerecord'
 require 'haml'
 
 set :database, 'sqlite3:///shortened_urls.db'
+after :create, :set_country
 
 class ShortenedUrl < ActiveRecord::Base
    # Validates whether the value of the specified attributes are unique across the system.
@@ -14,6 +15,12 @@ class ShortenedUrl < ActiveRecord::Base
       :with => %r{^(https?|ftp)://.+}i,
       :allow_blank => true, 
       :message => "The URL must start with http://, https://, or ftp:// ."
+end
+
+def set_country
+   xml = RestClient.get "http://api.hostip.info/get_xml.php?ip=#{ip}"  
+   self.country = XmlSimple.xml_in(xml.to_s, { 'ForceArray' => false })['featureMember']['Hostip']['countryAbbrev']
+   self.save
 end
 
 get '/' do
@@ -58,10 +65,6 @@ post '/search_url' do
    search_abr = ShortenedUrl.find_by_url!("#{params[:ur]}")
    haml :result_search_url, :locals => { :v => search_abr }
 end
-
-=begin
-añadir funcionalidad: http://nereida.deioc.ull.es/~stw/perlexamples/node27.html#1030
-=end
 
 get '/:shortened' do
    if params[:shortened] =~ /[0-9]+/
