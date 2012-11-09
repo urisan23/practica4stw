@@ -1,8 +1,12 @@
 !!!
 %html
-    %body
-        =yield
-        %form(action="/" method="POST")
-            %label(for="url")
-            %input(type="text" name="url" id="url" accesskey="s")
-            %input(type="submit" value="Shorten")
+  %head
+    %title Acortador de URLs
+    %link{:rel => "stylesheet", :type => "text/css", :href => "/style.css"}
+    %link{:rel => "stylesheet", :type => "text/css", :href => "/bootstrap/css/bootstrap.css"}
+  %body
+    %center
+      %h1
+        .added Acortador de URLs
+      %p
+    =yield
