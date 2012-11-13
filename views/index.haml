@@ -1,0 +1,22 @@
+- if @short_url.present? && !@short_url.valid?
+  %p Invalid URL: #{@short_url.url}
+
+.tabbable{:style => "margin-bottom: 18px;"}
+  %ul.nav.nav-tabs
+    %li.active
+      %a{"data-toggle" => "tab", :href => "#new"} Generar nueva URL
+    %li
+      %a{"data-toggle" => "tab", :href => "#custom"} Generar URL personalizada
+    %li
+      %a{"data-toggle" => "tab", :href => "#search"} Buscar URL
+    %li
+      %a{"data-toggle" => "tab", :href => "#list"} Listado completo de URLs
+  .tab-content{:style => "padding-bottom: 9px; border-bottom: 1px solid #ddd;"}
+    #new.tab-pane.active
+      = haml :new
+    #custom.tab-pane
+      = haml :custom
+    #search.tab-pane
+      = haml :search
+    #list.tab-pane
+      = haml :list
