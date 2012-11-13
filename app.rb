@@ -23,8 +23,13 @@ post '/:type' do
     @short_url = ShortenedUrl.find_by_url(params[:url])
     if !@short_url.present?
       @short_url = ShortenedUrl.find_or_create_by_url(params[:url])
-      @short_url.custom_url = settings.address+@short_url.id.to_s(36)
-      @short_url.save
+      @new = TRUE
+      if @short_url.valid?
+        @short_url.custom_url = settings.address+@short_url.id.to_s(36)
+        @short_url.save
+      else
+        @exist = FALSE
+      end
     else
       @exist = TRUE
     end
@@ -33,8 +38,13 @@ post '/:type' do
     @short_url = ShortenedUrl.find_by_url(params[:url])
     if !@short_url.present?
       @short_url = ShortenedUrl.find_or_create_by_url(params[:url])
-      @short_url.custom_url = settings.address+params[:custom_url]
-      @short_url.save
+      @new = TRUE
+      if @short_url.valid?
+        @short_url.custom_url = settings.address+params[:custom_url]
+        @short_url.save
+      else
+        @exist = FALSE
+      end
     else
       @exist = TRUE
     end

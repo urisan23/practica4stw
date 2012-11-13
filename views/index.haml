@@ -4,6 +4,12 @@
     %strong Error!
     La URL que ha introducido no es válida.
 
+- if @short_url.present? && @short_url.valid? && @new == TRUE
+  .alert.alert-success
+    %button.close{"data-dismiss" => "alert", :type => "button"} ×
+    %strong Éxito!
+    La nueva URL se ha generado correctamente.
+
 - if @exist.present? && @exist == TRUE
   .alert.alert-warning
     %button.close{"data-dismiss" => "alert", :type => "button"} ×
