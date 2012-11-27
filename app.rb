@@ -42,12 +42,12 @@ post '/search' do
   haml :search_result, :locals => {:result => search_url,:opt => "abr"}
   end
 end
-get '/:shortened' do
+get '/:short' do |short_url|
    begin
-      search_url = ShortenedUrl.find(params[:abr].to_i(36))
+      search_url = ShortenedUrl.find(short_url.to_i(36))
    rescue
-      search_url = ShortenedUrl.find_by_custom_url(params[:abr])
+      search_url = ShortenedUrl.find_by_custom_url(short_url)
    end
-   redirect search_url.url, 301
+   redirect search_url.url
 end
 
